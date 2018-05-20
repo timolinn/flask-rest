@@ -1,42 +1,13 @@
-from flask import Flask, jsonify, request, redirect, url_for
+from flask import Flask
+from flask_restful import Resource, Api
 
 app = Flask(__name__)
+api = Api(app)
 
-stores = [
-    {
-        'name': 'My Store oh yeah',
-        'items': [
-            {
-                'name': 'Nike Kits',
-                'price': 17.59
-            }
-        ]
-    }
-]
+class Student(Resource):
+    def get(self, name):
+        return {'student': name}
 
-@app.route('/store', methods=['POST'])
-def create_store():
-    data = request.get_json()
-    new_store = {
-        'name': data['name'],
-        'items': []
-    }
-    stores.append(new_store)
-    # return jsonify(stores)
-    return redirect(url_for('get_stores'))
+api.add_resource(Student, '/student/<string:name>')
 
-@app.route('/store/<string:name>')
-def get_store(name):
-    for store in stores:
-        if store['name'] == name:
-            return jsonify({'store':store})
-        else:
-            return jsonify({'error': f'{name} not found in our database'})
-
-@app.route('/store')
-def get_stores():
-    return jsonify({'stores':stores})
-    # pass
-
-if __name__ == '__main__':
-    app.run(debug=True)
+app.run()
