@@ -21,14 +21,14 @@ class Item(Resource):
 
     def find_by_name(self, name):
         sql = "SELECT * FROM items WHERE name=?"
-        result = DB.select_one(sql, (name,))
+        result = DBMan().select_one(sql, name)
 
         if result:
             return {'item': {'name': result[0], 'price': result[1]}}
 
 
     def post(self, name):
-        if self.find_by_name(name)
+        if self.find_by_name(name):
             return {'message': f'Item with name {name} already exists'}, 400
 
         data = Item.parser.parse_args()
@@ -38,7 +38,7 @@ class Item(Resource):
         }
 
         sql = "INSERT INTO items VALUES(?,?)"
-        DB.insert_one(sql, new_item['name'], new_item['price'])
+        DBMan().insert_one(sql, new_item['name'], new_item['price'])
         return new_item, 201
 
     def update(self, name):
@@ -57,9 +57,9 @@ class Item(Resource):
 
 
     def delete(self, name):
-        global items
-        items = list(filter(lambda x: x['name'] != name, items))
-        return {'message': 'Item Deleted'}
+        sql = "DELETE FROM items where name=?"
+        result = DBMan().delete(sql, name)
+        return {'message': 'Item Deleted', 'res': result}
 
     def put(self, name):
         parser = reqparse.RequestParser()
@@ -77,10 +77,15 @@ class Item(Resource):
             item.update(data)
         return item
 
-    def index(self):
-        return items
-
 
 class ItemList(Resource):
     def get(self):
+        sql = "SELECT * FROM items"
+        result = DBMan().selectall(sql)
+
+        items = []
+        for item in result:
+            item_dict = {'name': item[0], 'price': item[1]}
+            items.append(item_dict)
+
         return {'items': items}

@@ -1,12 +1,21 @@
 import sqlite3
 
-class DB:
+class DBMan:
     def __init__(self):
         self.connection = sqlite3.connect("data.db")
 
     def select_many(self, sql, *args):
         cursor = self.connection.cursor()
         res = cursor.execute(sql, (*args,))
+        results = res.fetchall()
+
+        self.connection.close()
+
+        return results
+
+    def selectall(self, sql):
+        cursor = self.connection.cursor()
+        res = cursor.execute(sql)
         results = res.fetchall()
 
         self.connection.close()
@@ -29,3 +38,11 @@ class DB:
 
         self.connection.commit()
         self.connection.close()
+
+    def delete(self, sql, *args):
+        cursor = self.connection.cursor()
+        res = cursor.execute(sql, (*args,))
+
+        self.connection.close()
+
+        return res
