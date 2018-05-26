@@ -1,4 +1,4 @@
-import db from db
+from db import db
 import app from app
 
 db.init_app(app)
