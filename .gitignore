@@ -1,0 +1,9 @@
+.vscode
+venv
+flaskrestenv
+vendor
+node_modules
+code_old
+__pycache__
+data.db
+*.pyc
