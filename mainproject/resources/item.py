@@ -24,6 +24,7 @@ class Item(Resource):
         item = ItemModel.find_by_name(name)
         if item:
             return item.json(), 200
+
         return {'item': 'Item with name "{}" not found'.format(name)}, 404
 
     def post(self, name):

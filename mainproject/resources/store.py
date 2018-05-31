@@ -6,7 +6,11 @@ class Store(Resource):
         store = StoreModel.find_by_name(name)
         if store:
             return store.json(), 200
+
         return {'store': 'store with name "{}" not found'.format(name)}, 404
+
+
+
 
     def post(self, name):
         if StoreModel.find_by_name(name):
