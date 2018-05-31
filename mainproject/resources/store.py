@@ -6,11 +6,11 @@ class Store(Resource):
         store = StoreModel.find_by_name(name)
         if store:
             return store.json(), 200
-        return {'store': f'store with name "{name}" not found'}, 404
+        return {'store': 'store with name {} not found'.format(name)}, 404
 
     def post(self, name):
         if StoreModel.find_by_name(name):
-            return {'message': f'store with name {name} already exists'}, 400
+            return {'message': 'store with name {} already exists'.format(name)}, 400
 
         new_store = StoreModel(name)
 
